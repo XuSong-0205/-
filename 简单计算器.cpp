@@ -11,7 +11,7 @@ int calculate(const string& str);
 
 int main()
 {
-	cout << "请输入一个正确的算书表达式 : ";
+	cout << "请输入一个正确的算术表达式 : ";
 	string str;
 	cin >> str;
 	cout << "该表达式计算结果为 : " << calculate(str) << endl;
@@ -27,9 +27,9 @@ int calculate(const string& s)
 	char sign = '+';
 	stack<int> sta;
 
-	for (int i = 0; i < s.size(); ++i)
+	for (size_t i = 0; i < s.size(); ++i)
 	{
-		if (isdigit(s.at(i)))
+		if (isdigit(static_cast<unsigned char>(s.at(i))))
 		{
 			num = num * 10 + (s.at(i) - '0');
 		}
@@ -38,9 +38,15 @@ int calculate(const string& s)
 		if (s.at(i) == '(')
 		{
 			num = calculate(string(s.begin() + i + 1, s.end()));
+			// 右括号以内已计算完毕，忽略
+			while (s.at(i) != ')')
+			{
+				++i;
+			}
+			i = i >= s.size() - 1 ? i : i + 1;
 		}
 
-		if ((!isdigit(s.at(i)) && s.at(i) != ' ') || i == s.size() - 1)
+		if ((!isdigit(static_cast<unsigned char>(s.at(i))) && s.at(i) != ' ') || i == s.size() - 1)
 		{
 			if (sign == '+')
 			{
